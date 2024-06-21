@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2a7cc68b95774ca4b376610175e77737" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="PizzeriaDBModel.Clientes" Width="1.5" PointX="1.125" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzeriaDBModel.DetallesPedido" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzeriaDBModel.Ingredientes" Width="1.5" PointX="9.5" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzeriaDBModel.Pedidos" Width="1.5" PointX="1.125" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzeriaDBModel.Pizzas" Width="1.5" PointX="5" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzeriaDBModel.PizzasCombos" Width="1.5" PointX="5" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzeriaDBModel.PizzasIngredientes" Width="1.5" PointX="7.25" PointY="4.625" IsExpanded="true" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__Pedidos__Cliente__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__DetallesP__Pedid__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__DetallesP__Pizza__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__PizzasIng__Ingre__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__PizzasCom__Pizza__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__PizzasCom__Pizza__4222D4EF" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzeriaDBModel.FK__PizzasIng__Pizza__3D5E1FD2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

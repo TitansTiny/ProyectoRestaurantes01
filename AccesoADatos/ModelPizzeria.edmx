@@ -1,0 +1,493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PizzeriaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="ClienteID" />
+          </Key>
+          <Property Name="ClienteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Apellido" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetallesPedido">
+          <Key>
+            <PropertyRef Name="DetalleID" />
+          </Key>
+          <Property Name="DetalleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PedidoID" Type="int" Nullable="false" />
+          <Property Name="PizzaID" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ingredientes">
+          <Key>
+            <PropertyRef Name="IngredienteID" />
+          </Key>
+          <Property Name="IngredienteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Pedidos">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+          </Key>
+          <Property Name="PedidoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClienteID" Type="int" Nullable="false" />
+          <Property Name="FechaPedido" Type="datetime" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pizzas">
+          <Key>
+            <PropertyRef Name="PizzaID" />
+          </Key>
+          <Property Name="PizzaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="255" />
+          <Property Name="Imagen" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PizzasCombos">
+          <Key>
+            <PropertyRef Name="ComboID" />
+          </Key>
+          <Property Name="ComboID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PizzaPrincipalID" Type="int" Nullable="false" />
+          <Property Name="PizzaIncluidaID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PizzasIngredientes">
+          <Key>
+            <PropertyRef Name="PizzaXIngredientes" />
+          </Key>
+          <Property Name="PizzaID" Type="int" Nullable="false" />
+          <Property Name="IngredienteID" Type="int" Nullable="false" />
+          <Property Name="PizzaXIngredientes" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cantidad" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__DetallesP__Pedid__47DBAE45">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="DetallesPedido" Type="Self.DetallesPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="DetallesPedido">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesP__Pizza__48CFD27E">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="DetallesPedido" Type="Self.DetallesPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="DetallesPedido">
+              <PropertyRef Name="PizzaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pedidos__Cliente__44FF419A">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="ClienteID" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="ClienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasCom__Pizza__412EB0B6">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="PizzasCombos" Type="Self.PizzasCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="PizzasCombos">
+              <PropertyRef Name="PizzaPrincipalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasCom__Pizza__4222D4EF">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="PizzasCombos" Type="Self.PizzasCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="PizzasCombos">
+              <PropertyRef Name="PizzaIncluidaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasIng__Ingre__3E52440B">
+          <End Role="Ingredientes" Type="Self.Ingredientes" Multiplicity="1" />
+          <End Role="PizzasIngredientes" Type="Self.PizzasIngredientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredientes">
+              <PropertyRef Name="IngredienteID" />
+            </Principal>
+            <Dependent Role="PizzasIngredientes">
+              <PropertyRef Name="IngredienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasIng__Pizza__3D5E1FD2">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="PizzasIngredientes" Type="Self.PizzasIngredientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="PizzasIngredientes">
+              <PropertyRef Name="PizzaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PizzeriaDBModelStoreContainer">
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetallesPedido" EntityType="Self.DetallesPedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingredientes" EntityType="Self.Ingredientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pedidos" EntityType="Self.Pedidos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pizzas" EntityType="Self.Pizzas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PizzasCombos" EntityType="Self.PizzasCombos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PizzasIngredientes" EntityType="Self.PizzasIngredientes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__DetallesP__Pedid__47DBAE45" Association="Self.FK__DetallesP__Pedid__47DBAE45">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="DetallesPedido" EntitySet="DetallesPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesP__Pizza__48CFD27E" Association="Self.FK__DetallesP__Pizza__48CFD27E">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="DetallesPedido" EntitySet="DetallesPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pedidos__Cliente__44FF419A" Association="Self.FK__Pedidos__Cliente__44FF419A">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasCom__Pizza__412EB0B6" Association="Self.FK__PizzasCom__Pizza__412EB0B6">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="PizzasCombos" EntitySet="PizzasCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasCom__Pizza__4222D4EF" Association="Self.FK__PizzasCom__Pizza__4222D4EF">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="PizzasCombos" EntitySet="PizzasCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasIng__Ingre__3E52440B" Association="Self.FK__PizzasIng__Ingre__3E52440B">
+            <End Role="Ingredientes" EntitySet="Ingredientes" />
+            <End Role="PizzasIngredientes" EntitySet="PizzasIngredientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasIng__Pizza__3D5E1FD2" Association="Self.FK__PizzasIng__Pizza__3D5E1FD2">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="PizzasIngredientes" EntitySet="PizzasIngredientes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PizzeriaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="ClienteID" />
+          </Key>
+          <Property Name="ClienteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Pedidos" Relationship="Self.FK__Pedidos__Cliente__44FF419A" FromRole="Clientes" ToRole="Pedidos" />
+        </EntityType>
+        <EntityType Name="DetallesPedido">
+          <Key>
+            <PropertyRef Name="DetalleID" />
+          </Key>
+          <Property Name="DetalleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PedidoID" Type="Int32" Nullable="false" />
+          <Property Name="PizzaID" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Pedidos" Relationship="Self.FK__DetallesP__Pedid__47DBAE45" FromRole="DetallesPedido" ToRole="Pedidos" />
+          <NavigationProperty Name="Pizzas" Relationship="Self.FK__DetallesP__Pizza__48CFD27E" FromRole="DetallesPedido" ToRole="Pizzas" />
+        </EntityType>
+        <EntityType Name="Ingredientes">
+          <Key>
+            <PropertyRef Name="IngredienteID" />
+          </Key>
+          <Property Name="IngredienteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PizzasIngredientes" Relationship="Self.FK__PizzasIng__Ingre__3E52440B" FromRole="Ingredientes" ToRole="PizzasIngredientes" />
+        </EntityType>
+        <EntityType Name="Pedidos">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+          </Key>
+          <Property Name="PedidoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClienteID" Type="Int32" Nullable="false" />
+          <Property Name="FechaPedido" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Clientes" Relationship="Self.FK__Pedidos__Cliente__44FF419A" FromRole="Pedidos" ToRole="Clientes" />
+          <NavigationProperty Name="DetallesPedido" Relationship="Self.FK__DetallesP__Pedid__47DBAE45" FromRole="Pedidos" ToRole="DetallesPedido" />
+        </EntityType>
+        <EntityType Name="Pizzas">
+          <Key>
+            <PropertyRef Name="PizzaID" />
+          </Key>
+          <Property Name="PizzaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Imagen" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DetallesPedido" Relationship="Self.FK__DetallesP__Pizza__48CFD27E" FromRole="Pizzas" ToRole="DetallesPedido" />
+          <NavigationProperty Name="PizzasCombos" Relationship="Self.FK__PizzasCom__Pizza__412EB0B6" FromRole="Pizzas" ToRole="PizzasCombos" />
+          <NavigationProperty Name="PizzasCombos1" Relationship="Self.FK__PizzasCom__Pizza__4222D4EF" FromRole="Pizzas" ToRole="PizzasCombos" />
+          <NavigationProperty Name="PizzasIngredientes" Relationship="Self.FK__PizzasIng__Pizza__3D5E1FD2" FromRole="Pizzas" ToRole="PizzasIngredientes" />
+        </EntityType>
+        <EntityType Name="PizzasCombos">
+          <Key>
+            <PropertyRef Name="ComboID" />
+          </Key>
+          <Property Name="ComboID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PizzaPrincipalID" Type="Int32" Nullable="false" />
+          <Property Name="PizzaIncluidaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Pizzas" Relationship="Self.FK__PizzasCom__Pizza__412EB0B6" FromRole="PizzasCombos" ToRole="Pizzas" />
+          <NavigationProperty Name="Pizzas1" Relationship="Self.FK__PizzasCom__Pizza__4222D4EF" FromRole="PizzasCombos" ToRole="Pizzas" />
+        </EntityType>
+        <EntityType Name="PizzasIngredientes">
+          <Key>
+            <PropertyRef Name="PizzaXIngredientes" />
+          </Key>
+          <Property Name="PizzaID" Type="Int32" Nullable="false" />
+          <Property Name="IngredienteID" Type="Int32" Nullable="false" />
+          <Property Name="PizzaXIngredientes" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cantidad" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Ingredientes" Relationship="Self.FK__PizzasIng__Ingre__3E52440B" FromRole="PizzasIngredientes" ToRole="Ingredientes" />
+          <NavigationProperty Name="Pizzas" Relationship="Self.FK__PizzasIng__Pizza__3D5E1FD2" FromRole="PizzasIngredientes" ToRole="Pizzas" />
+        </EntityType>
+        <Association Name="FK__Pedidos__Cliente__44FF419A">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="ClienteID" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="ClienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesP__Pedid__47DBAE45">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="DetallesPedido" Type="Self.DetallesPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="DetallesPedido">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesP__Pizza__48CFD27E">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="DetallesPedido" Type="Self.DetallesPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="DetallesPedido">
+              <PropertyRef Name="PizzaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasIng__Ingre__3E52440B">
+          <End Role="Ingredientes" Type="Self.Ingredientes" Multiplicity="1" />
+          <End Role="PizzasIngredientes" Type="Self.PizzasIngredientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredientes">
+              <PropertyRef Name="IngredienteID" />
+            </Principal>
+            <Dependent Role="PizzasIngredientes">
+              <PropertyRef Name="IngredienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasCom__Pizza__412EB0B6">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="PizzasCombos" Type="Self.PizzasCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="PizzasCombos">
+              <PropertyRef Name="PizzaPrincipalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasCom__Pizza__4222D4EF">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="PizzasCombos" Type="Self.PizzasCombos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="PizzasCombos">
+              <PropertyRef Name="PizzaIncluidaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PizzasIng__Pizza__3D5E1FD2">
+          <End Role="Pizzas" Type="Self.Pizzas" Multiplicity="1" />
+          <End Role="PizzasIngredientes" Type="Self.PizzasIngredientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizzas">
+              <PropertyRef Name="PizzaID" />
+            </Principal>
+            <Dependent Role="PizzasIngredientes">
+              <PropertyRef Name="PizzaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PizzeriaDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+          <EntitySet Name="DetallesPedido" EntityType="Self.DetallesPedido" />
+          <EntitySet Name="Ingredientes" EntityType="Self.Ingredientes" />
+          <EntitySet Name="Pedidos" EntityType="Self.Pedidos" />
+          <EntitySet Name="Pizzas" EntityType="Self.Pizzas" />
+          <EntitySet Name="PizzasCombos" EntityType="Self.PizzasCombos" />
+          <EntitySet Name="PizzasIngredientes" EntityType="Self.PizzasIngredientes" />
+          <AssociationSet Name="FK__Pedidos__Cliente__44FF419A" Association="Self.FK__Pedidos__Cliente__44FF419A">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesP__Pedid__47DBAE45" Association="Self.FK__DetallesP__Pedid__47DBAE45">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="DetallesPedido" EntitySet="DetallesPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesP__Pizza__48CFD27E" Association="Self.FK__DetallesP__Pizza__48CFD27E">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="DetallesPedido" EntitySet="DetallesPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasIng__Ingre__3E52440B" Association="Self.FK__PizzasIng__Ingre__3E52440B">
+            <End Role="Ingredientes" EntitySet="Ingredientes" />
+            <End Role="PizzasIngredientes" EntitySet="PizzasIngredientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasCom__Pizza__412EB0B6" Association="Self.FK__PizzasCom__Pizza__412EB0B6">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="PizzasCombos" EntitySet="PizzasCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasCom__Pizza__4222D4EF" Association="Self.FK__PizzasCom__Pizza__4222D4EF">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="PizzasCombos" EntitySet="PizzasCombos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PizzasIng__Pizza__3D5E1FD2" Association="Self.FK__PizzasIng__Pizza__3D5E1FD2">
+            <End Role="Pizzas" EntitySet="Pizzas" />
+            <End Role="PizzasIngredientes" EntitySet="PizzasIngredientes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PizzeriaDBModelStoreContainer" CdmEntityContainer="PizzeriaDBEntities1">
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="ClienteID" ColumnName="ClienteID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetallesPedido">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.DetallesPedido">
+              <MappingFragment StoreEntitySet="DetallesPedido">
+                <ScalarProperty Name="DetalleID" ColumnName="DetalleID" />
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+                <ScalarProperty Name="PizzaID" ColumnName="PizzaID" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingredientes">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.Ingredientes">
+              <MappingFragment StoreEntitySet="Ingredientes">
+                <ScalarProperty Name="IngredienteID" ColumnName="IngredienteID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedidos">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.Pedidos">
+              <MappingFragment StoreEntitySet="Pedidos">
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+                <ScalarProperty Name="ClienteID" ColumnName="ClienteID" />
+                <ScalarProperty Name="FechaPedido" ColumnName="FechaPedido" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pizzas">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.Pizzas">
+              <MappingFragment StoreEntitySet="Pizzas">
+                <ScalarProperty Name="PizzaID" ColumnName="PizzaID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PizzasCombos">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.PizzasCombos">
+              <MappingFragment StoreEntitySet="PizzasCombos">
+                <ScalarProperty Name="ComboID" ColumnName="ComboID" />
+                <ScalarProperty Name="PizzaPrincipalID" ColumnName="PizzaPrincipalID" />
+                <ScalarProperty Name="PizzaIncluidaID" ColumnName="PizzaIncluidaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PizzasIngredientes">
+            <EntityTypeMapping TypeName="PizzeriaDBModel.PizzasIngredientes">
+              <MappingFragment StoreEntitySet="PizzasIngredientes">
+                <ScalarProperty Name="PizzaID" ColumnName="PizzaID" />
+                <ScalarProperty Name="IngredienteID" ColumnName="IngredienteID" />
+                <ScalarProperty Name="PizzaXIngredientes" ColumnName="PizzaXIngredientes" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
